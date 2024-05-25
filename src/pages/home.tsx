@@ -7,9 +7,9 @@ import {
   IGetRepositoriesParams,
 } from "@/interfaces/repository.interface";
 import { EUserSort, IGetUsersParams } from "@/interfaces/user.interface";
+import { fetchRepositoryList } from "@/redux/repositoriesReducer";
 import { AppDispatch, RootState } from "@/redux/store";
 import { fetchUserList } from "@/redux/usersReducer";
-import { getRepositories } from "@/services/repositories.service";
 import styles from "@/styles/Home.module.scss";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,6 +48,9 @@ const HomePage: React.FC = () => {
     });
 
   const userListState = useSelector((state: RootState) => state.userList);
+  const repositoryListState = useSelector(
+    (state: RootState) => state.repositoryList
+  );
 
   useEffect(() => {
     const timeoutSearch = setTimeout(() => {
@@ -68,12 +71,9 @@ const HomePage: React.FC = () => {
   }, [getUsersParams, dispatch]);
   useEffect(() => {
     if (getRepositoriesParams.q.length > 3) {
-      (async () => {
-        const data = await getRepositories(getRepositoriesParams);
-        console.log("🚀 ~ data:", data);
-      })();
+      dispatch(fetchRepositoryList(getRepositoriesParams));
     }
-  }, [getRepositoriesParams]);
+  }, [getRepositoriesParams, dispatch]);
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
@@ -99,6 +99,8 @@ const HomePage: React.FC = () => {
           ))}
         </Select>
       </div>
+      {searchKeyword.length <= 3 && <p>Search user or repository</p>}
+
       {searchCategory === ESearchCategory.USERS && searchKeyword.length > 3 && (
         <div>
           {userListState.loading && <p>Loading...</p>}
@@ -125,6 +127,38 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {searchCategory === ESearchCategory.REPOSITORIES &&
+        searchKeyword.length > 3 && (
+          <div>
+            {repositoryListState.loading && <p>Loading...</p>}
+            {repositoryListState.error && (
+              <p>Error: {repositoryListState.error}</p>
+            )}
+            <div className={styles.ListUser}>
+              {repositoryListState.results &&
+                !repositoryListState.loading &&
+                Object.entries(repositoryListState.results).map(
+                  ([cacheKey, resultSet]) => {
+                    if (cacheKey === repositoryListState.cacheKey)
+                      return resultSet.items.map((result) => (
+                        <div key={result.id}>
+                          <p>{result.name}</p>
+                          <div>
+                            <img
+                              src={result.owner.avatar_url}
+                              alt={result.owner.login}
+                              width={50}
+                            />
+                          </div>
+                        </div>
+                      ));
+                    return null;
+                  }
+                )}
+            </div>
+          </div>
+        )}
     </main>
   );
 };
