@@ -1,0 +1,13 @@
+.Select {
+  border: 1px solid $neutral-300;
+  outline: none;
+  padding: $space-2 $space-4;
+  margin: $space-2 auto;
+  transition: 0.25s box-shadow;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: $primary-400;
+    box-shadow: 0px 0px 0px 3px $primary-100;
+  }
+}
