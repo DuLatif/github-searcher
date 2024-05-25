@@ -1,0 +1,19 @@
+.Container {
+  display: flex;
+  flex-direction: row;
+  gap: $space-4;
+  align-items: center;
+
+  img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .Title {
+    @include h6;
+  }
+
+  .Subtitle {
+    color: $text-secondary;
+  }
+}
