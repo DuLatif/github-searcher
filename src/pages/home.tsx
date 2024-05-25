@@ -1,16 +1,18 @@
 import Header from "@/components/Header";
 import Input from "@/components/Input";
-import React, { useEffect, useState } from "react";
-import styles from "@/styles/Home.module.scss";
 import Select from "@/components/Select";
 import { EOrder, ESearchCategory } from "@/interfaces/global.interface";
-import { EUserSort, IGetUsersParams } from "@/interfaces/user.interface";
 import {
   ERepositorySort,
   IGetRepositoriesParams,
 } from "@/interfaces/repository.interface";
-import { getUsers } from "@/services/users.service";
+import { EUserSort, IGetUsersParams } from "@/interfaces/user.interface";
+import { AppDispatch, RootState } from "@/redux/store";
+import { fetchUserList } from "@/redux/usersReducer";
 import { getRepositories } from "@/services/repositories.service";
+import styles from "@/styles/Home.module.scss";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const searchOptions: { label: string; value: ESearchCategory }[] = [
   {
@@ -24,7 +26,7 @@ const searchOptions: { label: string; value: ESearchCategory }[] = [
 ];
 
 const HomePage: React.FC = () => {
-  console.log(import.meta.env.VITE_API_URL);
+  const dispatch: AppDispatch = useDispatch();
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchCategory, setSearchCategory] = useState<ESearchCategory>(
     ESearchCategory.USERS
@@ -45,6 +47,8 @@ const HomePage: React.FC = () => {
       order: EOrder.DESC,
     });
 
+  const userListState = useSelector((state: RootState) => state.userList);
+
   useEffect(() => {
     const timeoutSearch = setTimeout(() => {
       if (searchCategory === ESearchCategory.USERS) {
@@ -59,12 +63,9 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     if (getUsersParams.q.length > 3) {
-      (async () => {
-        const data = await getUsers(getUsersParams);
-        console.log("🚀 ~ data:", data);
-      })();
+      dispatch(fetchUserList(getUsersParams));
     }
-  }, [getUsersParams]);
+  }, [getUsersParams, dispatch]);
   useEffect(() => {
     if (getRepositoriesParams.q.length > 3) {
       (async () => {
@@ -92,10 +93,38 @@ const HomePage: React.FC = () => {
         />
         <Select onChange={handleSearchSelect}>
           {searchOptions.map((item) => (
-            <option value={item.value}>{item.label}</option>
+            <option key={item.value} value={item.value}>
+              {item.label}
+            </option>
           ))}
         </Select>
       </div>
+      {searchCategory === ESearchCategory.USERS && searchKeyword.length > 3 && (
+        <div>
+          {userListState.loading && <p>Loading...</p>}
+          {userListState.error && <p>Error: {userListState.error}</p>}
+          <div className={styles.ListUser}>
+            {userListState.results &&
+              !userListState.loading &&
+              Object.entries(userListState.results).map(
+                ([cacheKey, resultSet]) => {
+                  if (cacheKey === userListState.cacheKey)
+                    return resultSet.items.map((result) => (
+                      <div key={result.id}>
+                        <img
+                          src={result.avatar_url}
+                          alt={result.login}
+                          width={50}
+                        />
+                        <p>{result.login}</p>
+                      </div>
+                    ));
+                  return null;
+                }
+              )}
+          </div>
+        </div>
+      )}
     </main>
   );
 };

@@ -6,4 +6,10 @@
     flex-direction: row;
     gap: $space-4;
   }
+
+  .ListUser {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: space-between;
+  }
 }
