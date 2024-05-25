@@ -1,0 +1,9 @@
+.Container {
+  .Form {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: row;
+    gap: $space-4;
+  }
+}

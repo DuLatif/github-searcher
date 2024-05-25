@@ -3,6 +3,11 @@ export enum EOrder {
   ASC = "asc",
 }
 
+export enum ESearchCategory {
+  USERS = "users",
+  REPOSITORIES = "repositories",
+}
+
 export interface IPaginaionParams {
   order: EOrder;
   per_page: number;
