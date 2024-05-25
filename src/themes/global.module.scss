@@ -1,0 +1,10 @@
+.Container {
+  padding: $space-4 $space-6;
+  max-width: $lg;
+  margin: $space-4 auto;
+  color: $text-primary;
+
+  p {
+    @include body1;
+  }
+}
