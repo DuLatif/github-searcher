@@ -9,6 +9,8 @@ import {
   ERepositorySort,
   IGetRepositoriesParams,
 } from "@/interfaces/repository.interface";
+import { getUsers } from "@/services/users.service";
+import { getRepositories } from "@/services/repositories.service";
 
 const searchOptions: { label: string; value: ESearchCategory }[] = [
   {
@@ -22,6 +24,7 @@ const searchOptions: { label: string; value: ESearchCategory }[] = [
 ];
 
 const HomePage: React.FC = () => {
+  console.log(import.meta.env.VITE_API_URL);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchCategory, setSearchCategory] = useState<ESearchCategory>(
     ESearchCategory.USERS
@@ -53,6 +56,23 @@ const HomePage: React.FC = () => {
 
     return () => clearTimeout(timeoutSearch);
   }, [searchCategory, searchKeyword]);
+
+  useEffect(() => {
+    if (getUsersParams.q.length > 3) {
+      (async () => {
+        const data = await getUsers(getUsersParams);
+        console.log("🚀 ~ data:", data);
+      })();
+    }
+  }, [getUsersParams]);
+  useEffect(() => {
+    if (getRepositoriesParams.q.length > 3) {
+      (async () => {
+        const data = await getRepositories(getRepositoriesParams);
+        console.log("🚀 ~ data:", data);
+      })();
+    }
+  }, [getRepositoriesParams]);
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
