@@ -43,19 +43,6 @@ Once the application is running, you can perform the following actions:
 - Pagination allows you to navigate through multiple pages of results.
 - Various states such as initial, loading, and error are handled gracefully, providing feedback to the user.
 
-## Technologies Used
-
-- React
-- React Router DOM
-- Redux
-- Redux Persist
-- Axios
-- Vite
-- vitest
-- @testing-library
-- SASS
-- TypeScript
-
 ## Commands
 
 - `yarn dev`: Starts the development server.
