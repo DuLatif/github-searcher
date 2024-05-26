@@ -68,13 +68,10 @@ const HomePage: React.FC = () => {
           result.total_count,
           (getUsersParams.page - 1) * getUsersParams.per_page + 1
         ),
-        end_item:
-          result.total_count > getUsersParams.per_page
-            ? Math.min(
-                getUsersParams.page * getUsersParams.per_page,
-                result.total_page
-              )
-            : result.total_count,
+        end_item: Math.min(
+          getUsersParams.page * getUsersParams.per_page,
+          result.total_count
+        ),
         total_page: result.total_page,
         total_data: result.total_count,
       };
@@ -92,7 +89,7 @@ const HomePage: React.FC = () => {
           (getRepositoriesParams.page - 1) * getRepositoriesParams.per_page + 1,
         end_item: Math.min(
           getRepositoriesParams.page * getRepositoriesParams.per_page,
-          result.total_page
+          result.total_count
         ),
         total_page: result.total_page,
         total_data: result.total_count,
