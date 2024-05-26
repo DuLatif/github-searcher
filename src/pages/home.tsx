@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Input from "@/components/Input";
 import Pagination from "@/components/Pagination";
 import PaginationStats from "@/components/Pagination/PaginationStats";
+import RepositoryItem from "@/components/RepositoryItem";
 import Select from "@/components/Select";
 import UserItem from "@/components/UserItem";
 import { EOrder, ESearchCategory } from "@/interfaces/global.interface";
@@ -143,7 +144,15 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* ------ If still not searching yet --------- */}
-      {searchKeyword.length <= 3 && <p>Search user or repository</p>}
+      {searchKeyword.length <= 3 && (
+        <div className={styles.EmptyState}>
+          <img
+            src="https://icons.veryicon.com/png/o/commerce-shopping/small-icons-with-highlights/search-260.png"
+            alt="search icon"
+          />
+          <p>Search for GitHub users or repositories to see the results here</p>
+        </div>
+      )}
 
       {/* ------ To display list users --------- */}
       {searchCategory === ESearchCategory.USERS && searchKeyword.length > 3 && (
@@ -204,25 +213,7 @@ const HomePage: React.FC = () => {
                       ([cacheKey, resultSet]) => {
                         if (cacheKey === repositoryListState.cacheKey)
                           return resultSet.items.map((repo) => (
-                            <div key={repo.id}>
-                              <p>{repo.name}</p>
-                              <p>{repo.score}</p>
-                              <p>{repo.description}</p>
-                              <p>{repo.language}</p>
-                              <p>{repo.stargazers_count}</p>
-                              <p>{repo.watchers_count}</p>
-                              <div>
-                                <img
-                                  src={repo.owner.avatar_url}
-                                  alt={repo.owner.login}
-                                  width={50}
-                                />
-                                <p>{repo.owner.login}</p>
-                              </div>
-                              <a target="_blank" href={repo.html_url}>
-                                detail
-                              </a>
-                            </div>
+                            <RepositoryItem key={repo.id} repository={repo} />
                           ));
                         return null;
                       }
