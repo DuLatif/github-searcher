@@ -1,5 +1,8 @@
-import { ESearchCategory } from "@/interfaces/global.interface";
-import { IGetRepositoriesParams } from "@/interfaces/repository.interface";
+import { EOrder, ESearchCategory } from "@/interfaces/global.interface";
+import {
+  ERepositorySort,
+  IGetRepositoriesParams,
+} from "@/interfaces/repository.interface";
 import { fetchRepositoryList } from "@/redux/repositoriesReducer";
 import { AppDispatch, RootState } from "@/redux/store";
 import styles from "@/styles/Home.module.scss";
@@ -10,6 +13,8 @@ import Pagination from "../Pagination";
 import PaginationStats from "../Pagination/PaginationStats";
 import Render from "../Render";
 import RepositoryItem from "../RepositoryItem";
+import Select from "../Select";
+import { orderOptions, repoSortingOptions } from "@/constants/options";
 
 export interface IListRepositoryProps {
   getRepositoriesParams: IGetRepositoriesParams;
@@ -76,11 +81,52 @@ const ListRepository: React.FC<IListRepositoryProps> = (props) => {
           <Alert color="danger" message={repositoryListState.error || ""} />
         </Render>
         <Render in={!!repositoryListState.results}>
-          <PaginationStats
-            start={repositoryResponsePagination.start_item}
-            end={repositoryResponsePagination.end_item}
-            total={repositoryResponsePagination.total_data}
-          />
+          <div className={styles.TopBar}>
+            <PaginationStats
+              start={repositoryResponsePagination.start_item}
+              end={repositoryResponsePagination.end_item}
+              total={repositoryResponsePagination.total_data}
+            />
+            <div className={styles.SortBy}>
+              <p>Sort by: </p>
+              <Select
+                onChange={(e) =>
+                  setGetRepositoriesParams((prev) => ({
+                    ...prev,
+                    order: e.target.value as EOrder,
+                  }))
+                }
+              >
+                {orderOptions.map((item) => (
+                  <option
+                    selected={item.value === getRepositoriesParams.order}
+                    key={item.value}
+                    value={item.value}
+                  >
+                    {item.label}
+                  </option>
+                ))}
+              </Select>
+              <Select
+                onChange={(e) =>
+                  setGetRepositoriesParams((prev) => ({
+                    ...prev,
+                    sort: e.target.value as ERepositorySort,
+                  }))
+                }
+              >
+                {repoSortingOptions.map((item) => (
+                  <option
+                    selected={item.value === getRepositoriesParams.sort}
+                    key={item.value}
+                    value={item.value}
+                  >
+                    {item.label}
+                  </option>
+                ))}
+              </Select>
+            </div>
+          </div>
           <div className={styles.ListUser}>
             <Render in={!repositoryListState.loading}>
               {Object.entries(repositoryListState.results).map(

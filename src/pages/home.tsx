@@ -12,7 +12,7 @@ import {
 } from "@/interfaces/repository.interface";
 import { EUserSort, IGetUsersParams } from "@/interfaces/user.interface";
 import styles from "@/styles/Home.module.scss";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const searchOptions: { label: string; value: ESearchCategory }[] = [
   {
@@ -26,6 +26,7 @@ const searchOptions: { label: string; value: ESearchCategory }[] = [
 ];
 
 const HomePage: React.FC = () => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchCategory, setSearchCategory] = useState<ESearchCategory>(
     ESearchCategory.USERS
@@ -58,6 +59,11 @@ const HomePage: React.FC = () => {
     return () => clearTimeout(timeoutSearch);
   }, [searchCategory, searchKeyword]);
 
+  useEffect(() => {
+    setSearchKeyword("");
+    if (inputRef.current) inputRef.current.focus();
+  }, [searchCategory]);
+
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
   };
@@ -72,7 +78,9 @@ const HomePage: React.FC = () => {
       <div className={styles.Form}>
         <Input
           placeholder="Typing to search users or repositories"
+          value={searchKeyword}
           onChange={handleSearchInput}
+          ref={inputRef}
         />
         <Select onChange={handleSearchSelect}>
           {searchOptions.map((item) => (
