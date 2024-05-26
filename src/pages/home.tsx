@@ -48,6 +48,11 @@ const HomePage: React.FC = () => {
     });
 
   useEffect(() => {
+    setSearchKeyword("");
+    if (inputRef.current) inputRef.current.focus();
+  }, [searchCategory]);
+
+  useEffect(() => {
     const timeoutSearch = setTimeout(() => {
       if (searchCategory === ESearchCategory.USERS) {
         setGetUsersParams((prev) => ({ ...prev, q: searchKeyword }));
@@ -58,11 +63,6 @@ const HomePage: React.FC = () => {
 
     return () => clearTimeout(timeoutSearch);
   }, [searchCategory, searchKeyword]);
-
-  useEffect(() => {
-    setSearchKeyword("");
-    if (inputRef.current) inputRef.current.focus();
-  }, [searchCategory]);
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
@@ -81,6 +81,7 @@ const HomePage: React.FC = () => {
           value={searchKeyword}
           onChange={handleSearchInput}
           ref={inputRef}
+          autoFocus
         />
         <Select onChange={handleSearchSelect}>
           {searchOptions.map((item) => (

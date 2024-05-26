@@ -37,5 +37,8 @@
     .ListUser {
       grid-template-columns: 1fr;
     }
+    .TopBar {
+      flex-direction: column;
+    }
   }
 }
