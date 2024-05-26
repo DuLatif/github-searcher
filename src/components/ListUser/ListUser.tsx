@@ -20,6 +20,7 @@ export interface IListUserProps {
 const ListUser: React.FC<IListUserProps> = (props) => {
   const { getUsersParams, searchCategory, searchKeyword, setGetUsersParams } =
     props;
+
   const dispatch: AppDispatch = useDispatch();
   const userListState = useSelector((state: RootState) => state.userList);
   const userResponsePagination = useSelector((state: RootState) => {
