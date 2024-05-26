@@ -1,5 +1,9 @@
 # GitHub Search, Filter, and Pagination Application
 
+<p align="center">
+  <img src="https://i.ibb.co.com/mSdd6DQ/github-sercher-ss.png" alt="Preview Github Searcher" />
+</p>
+
 ## Introduction
 
 This project is a simple single-page application built with ReactJS, Redux, Redux Persist, React Router, and other modern technologies. It allows users to search for users or repositories on GitHub, displaying the results in a responsive grid format. The application efficiently handles API calls, loading states, and pagination.
@@ -58,6 +62,6 @@ Once the application is running, you can perform the following actions:
 - `yarn test`: Runs tests.
 - `yarn build`: Builds the project for production.
 
-## Deployment
+## Demo
 
 A live demo of the project is available at [https://dulatif-github-searcher.netlify.app](https://dulatif-github-searcher.netlify.app).
