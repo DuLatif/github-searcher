@@ -1,6 +1,7 @@
 import { IRepository } from "@/interfaces/repository.interface";
 import React from "react";
 import styles from "./RepositoryItem.module.scss";
+import { formatNumber } from "@/utils/formatNumber";
 
 export interface IRepositoryItemProps {
   repository: IRepository;
@@ -14,7 +15,7 @@ const RepositoryItem: React.FC<IRepositoryItemProps> = ({ repository }) => {
     >
       <div className={styles.Info}>
         <div className={styles.Star}>
-          <span>{repository.stargazers_count}</span>
+          <span>{formatNumber(repository.stargazers_count)}</span>
           <img src="https://cdn-icons-png.freepik.com/256/1828/1828884.png?semt=ais_hybrid" />
         </div>
         <h6>{repository.name}</h6>

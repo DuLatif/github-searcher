@@ -64,11 +64,17 @@ const HomePage: React.FC = () => {
     if (!!resultEntry) {
       const result = resultEntry[1];
       return {
-        start_item: (getUsersParams.page - 1) * getUsersParams.per_page + 1,
-        end_item: Math.min(
-          getUsersParams.page * getUsersParams.per_page,
-          result.total_page
+        start_item: Math.min(
+          result.total_count,
+          (getUsersParams.page - 1) * getUsersParams.per_page + 1
         ),
+        end_item:
+          result.total_count > getUsersParams.per_page
+            ? Math.min(
+                getUsersParams.page * getUsersParams.per_page,
+                result.total_page
+              )
+            : result.total_count,
         total_page: result.total_page,
         total_data: result.total_count,
       };
@@ -222,7 +228,7 @@ const HomePage: React.FC = () => {
                 </div>
                 <Pagination
                   currentPage={getRepositoriesParams.page}
-                  totalPages={userResponsePagination.total_page}
+                  totalPages={repositoryResponsePagination.total_page}
                   onPageChange={(page) => {
                     window.scrollTo(0, 0);
                     setGetRepositoriesParams((prev) => ({ ...prev, page }));

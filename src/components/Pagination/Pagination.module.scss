@@ -24,7 +24,9 @@
     }
 
     &.Page {
-      width: 36px;
+      min-width: 36px;
+      box-sizing: border-box;
+      padding: 0px $space-4;
 
       &.CurrentPage {
         background-color: $primary-100;

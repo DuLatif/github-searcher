@@ -1,6 +1,8 @@
 .Repository {
   border: 1px solid $neutral-200;
   padding: $space-6;
+  padding-top: $space-4;
+  padding-bottom: $space-5;
   border-radius: $space-3;
   cursor: pointer;
   transition: 0.25s;
@@ -24,17 +26,18 @@
     flex: 1;
 
     .Star {
+      @include body2;
       display: flex;
       align-items: center;
-      gap: $space-2;
+      gap: $space-1;
       position: absolute;
       right: $space-4;
-      top: $space-7;
+      top: $space-6;
       color: rgb(235, 203, 23);
 
       img {
-        width: 20px;
-        height: 20px;
+        width: 16px;
+        height: 16px;
       }
     }
 
@@ -71,6 +74,7 @@
     display: flex;
     align-items: center;
     gap: $space-2;
+    flex: 1;
 
     .Avatar {
       width: 32px;
@@ -83,6 +87,11 @@
     p {
       font-weight: $font-semibold;
       @include body2;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: 1;
     }
   }
 }

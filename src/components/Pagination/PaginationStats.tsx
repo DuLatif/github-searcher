@@ -1,3 +1,4 @@
+import { formatNumber } from "@/utils/formatNumber";
 import React from "react";
 
 export interface IPaginationStatsProps {
@@ -13,7 +14,7 @@ const PaginationStats: React.FC<IPaginationStatsProps> = ({
   return (
     <div>
       <p>
-        Showing {start} to {end} of {total} total items
+        Showing {start} to {end} of {formatNumber(total)} total items
       </p>
     </div>
   );
