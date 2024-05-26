@@ -8,6 +8,18 @@
     margin-bottom: $space-6;
   }
 
+  .TopBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .SortBy {
+      display: flex;
+      align-items: center;
+      gap: $space-4;
+    }
+  }
+
   .ListUser {
     margin: $space-4 auto;
     display: grid;

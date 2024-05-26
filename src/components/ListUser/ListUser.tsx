@@ -2,14 +2,16 @@ import React, { useEffect } from "react";
 import Render from "../Render";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { IGetUsersParams } from "@/interfaces/user.interface";
+import { EUserSort, IGetUsersParams } from "@/interfaces/user.interface";
 import { fetchUserList } from "@/redux/usersReducer";
-import { ESearchCategory } from "@/interfaces/global.interface";
+import { EOrder, ESearchCategory } from "@/interfaces/global.interface";
 import UserItem from "../UserItem";
 import Alert from "../Alert";
 import PaginationStats from "../Pagination/PaginationStats";
 import Pagination from "../Pagination";
 import styles from "@/styles/Home.module.scss";
+import Select from "../Select";
+import { orderOptions, userSortingOptions } from "@/constants/options";
 
 export interface IListUserProps {
   getUsersParams: IGetUsersParams;
@@ -65,11 +67,52 @@ const ListUser: React.FC<IListUserProps> = (props) => {
           <Alert color="danger" message={userListState.error!} />
         </Render>
         <Render in={!!userListState.results}>
-          <PaginationStats
-            start={userResponsePagination.start_item}
-            end={userResponsePagination.end_item}
-            total={userResponsePagination.total_data}
-          />
+          <div className={styles.TopBar}>
+            <PaginationStats
+              start={userResponsePagination.start_item}
+              end={userResponsePagination.end_item}
+              total={userResponsePagination.total_data}
+            />
+            <div className={styles.SortBy}>
+              <p>Sort by: </p>
+              <Select
+                onChange={(e) =>
+                  setGetUsersParams((prev) => ({
+                    ...prev,
+                    order: e.target.value as EOrder,
+                  }))
+                }
+              >
+                {orderOptions.map((item) => (
+                  <option
+                    selected={item.value === getUsersParams.order}
+                    key={item.value}
+                    value={item.value}
+                  >
+                    {item.label}
+                  </option>
+                ))}
+              </Select>
+              <Select
+                onChange={(e) =>
+                  setGetUsersParams((prev) => ({
+                    ...prev,
+                    sort: e.target.value as EUserSort,
+                  }))
+                }
+              >
+                {userSortingOptions.map((item) => (
+                  <option
+                    selected={item.value === getUsersParams.sort}
+                    key={item.value}
+                    value={item.value}
+                  >
+                    {item.label}
+                  </option>
+                ))}
+              </Select>
+            </div>
+          </div>
           <div className={styles.ListUser}>
             <Render in={!userListState.loading}>
               {Object.entries(userListState.results).map(
