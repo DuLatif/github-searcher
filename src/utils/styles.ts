@@ -1,5 +1,6 @@
 export const combineClasses = (
   classes: (CSSModuleClasses | string | boolean | undefined)[]
 ): string => {
-  return classes.join(" ");
+  const filteredClasses = classes.filter(Boolean);
+  return filteredClasses.join(" ");
 };
