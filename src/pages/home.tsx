@@ -163,7 +163,13 @@ const HomePage: React.FC = () => {
       {/* ------ To display list users --------- */}
       {searchCategory === ESearchCategory.USERS && searchKeyword.length > 3 && (
         <div>
-          {userListState.loading && <p>Loading...</p>}
+          {userListState.loading && !userListState.results && (
+            <div className={styles.ListUser}>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
+                <UserItem.Skeleton key={item} />
+              ))}
+            </div>
+          )}
           {userListState.error && (
             <Alert color="danger" message={userListState.error} />
           )}
@@ -185,6 +191,10 @@ const HomePage: React.FC = () => {
                       return null;
                     }
                   )}
+                {userListState.loading &&
+                  [1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
+                    <UserItem.Skeleton key={item} />
+                  ))}
               </div>
               <Pagination
                 currentPage={getUsersParams.page}

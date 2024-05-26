@@ -46,4 +46,40 @@
       display: inline-block;
     }
   }
+
+  &.Skeleton {
+    pointer-events: none;
+
+    .Avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      animation: $skeleton;
+    }
+
+    .Info {
+      flex: 1;
+
+      .Name {
+        width: 100%;
+        max-width: 80px;
+        height: 16px;
+        animation: $skeleton;
+        margin-bottom: $space-3;
+      }
+
+      .Type {
+        width: 100%;
+        max-width: 40px;
+        height: 14px;
+        animation: $skeleton;
+      }
+      .Score {
+        width: 100%;
+        max-width: 40px;
+        height: 12px;
+        animation: $skeleton;
+      }
+    }
+  }
 }

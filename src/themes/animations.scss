@@ -1,0 +1,10 @@
+$skeleton: skeleton 1s infinite alternate;
+
+@keyframes skeleton {
+  0% {
+    background-color: $neutral-25;
+  }
+  100% {
+    background-color: $neutral-100;
+  }
+}

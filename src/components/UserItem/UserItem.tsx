@@ -1,11 +1,12 @@
 import React from "react";
 import { IUser } from "@/interfaces/user.interface";
 import styles from "./UserItem.module.scss";
+import { combineClasses } from "@/utils/styles";
 
 export interface IUserItemPros {
   user: IUser;
 }
-const UserItem: React.FC<IUserItemPros> = ({ user }) => {
+const UserItem = ({ user }: IUserItemPros) => {
   return (
     <div
       key={user.id}
@@ -29,4 +30,22 @@ const UserItem: React.FC<IUserItemPros> = ({ user }) => {
   );
 };
 
+const UserItemSkeleton: React.FC = () => {
+  return (
+    <div className={combineClasses([styles.User, styles.Skeleton])}>
+      <div className={styles.Avatar}></div>
+      <div className={styles.Info}>
+        <div className={styles.Profile}>
+          <p className={styles.Name}></p>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <p className={styles.Type}></p>
+            <p className={styles.Score}></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+UserItem.Skeleton = UserItemSkeleton;
 export default UserItem;
