@@ -2,11 +2,12 @@ import { IRepository } from "@/interfaces/repository.interface";
 import React from "react";
 import styles from "./RepositoryItem.module.scss";
 import { formatNumber } from "@/utils/formatNumber";
+import { combineClasses } from "@/utils/styles";
 
 export interface IRepositoryItemProps {
   repository: IRepository;
 }
-const RepositoryItem: React.FC<IRepositoryItemProps> = ({ repository }) => {
+const RepositoryItem = ({ repository }: IRepositoryItemProps) => {
   return (
     <div
       key={repository.id}
@@ -35,4 +36,24 @@ const RepositoryItem: React.FC<IRepositoryItemProps> = ({ repository }) => {
   );
 };
 
+const RepositoryItemSkeleton: React.FC = () => {
+  return (
+    <div className={combineClasses([styles.Repository, styles.Skeleton])}>
+      <div className={styles.Info}>
+        <div className={styles.Star}></div>
+        <h6></h6>
+        <p className={styles.Description}></p>
+      </div>
+      <div className={styles.Footer}>
+        <div className={styles.Owner}>
+          <div className={styles.Avatar}></div>
+          <p></p>
+        </div>
+        <p className={styles.Language}></p>
+      </div>
+    </div>
+  );
+};
+
+RepositoryItem.Skeleton = RepositoryItemSkeleton;
 export default RepositoryItem;

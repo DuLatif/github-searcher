@@ -213,7 +213,13 @@ const HomePage: React.FC = () => {
       {searchCategory === ESearchCategory.REPOSITORIES &&
         searchKeyword.length > 3 && (
           <div>
-            {repositoryListState.loading && <p>Loading...</p>}
+            {repositoryListState.loading && !repositoryListState.results && (
+              <div className={styles.ListUser}>
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
+                  <RepositoryItem.Skeleton key={item} />
+                ))}
+              </div>
+            )}
             {repositoryListState.error && (
               <Alert color="danger" message={repositoryListState.error} />
             )}
@@ -235,6 +241,10 @@ const HomePage: React.FC = () => {
                         return null;
                       }
                     )}
+                  {repositoryListState.loading &&
+                    [1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
+                      <RepositoryItem.Skeleton key={item} />
+                    ))}
                 </div>
                 <Pagination
                   currentPage={getRepositoriesParams.page}

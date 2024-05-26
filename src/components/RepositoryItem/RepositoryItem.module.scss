@@ -60,6 +60,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: $space-2;
     border-top: 1px solid $neutral-300;
     margin-top: $space-4;
     padding-top: $space-4;
@@ -92,6 +93,52 @@
       overflow: hidden;
       text-overflow: ellipsis;
       -webkit-line-clamp: 1;
+    }
+  }
+
+  &.Skeleton {
+    pointer-events: none;
+
+    .Info {
+      flex: 1;
+
+      .Star {
+        animation: $skeleton;
+        height: 14px;
+        width: 30px;
+      }
+
+      h6 {
+        animation: $skeleton;
+        height: 1.25rem;
+        width: 50%;
+      }
+
+      .Description {
+        height: 48px;
+        width: 100%;
+        animation: $skeleton;
+      }
+    }
+
+    .Owner {
+      max-width: 60%;
+
+      .Avatar {
+        animation: $skeleton;
+      }
+
+      p {
+        width: 80%;
+        height: 14px;
+        animation: $skeleton;
+      }
+    }
+
+    .Language {
+      width: 60px;
+      height: 14px;
+      animation: $skeleton;
     }
   }
 }
