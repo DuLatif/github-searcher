@@ -1,0 +1,12 @@
+.Alert {
+  display: block;
+  padding: $space-6 $space-4;
+  border-radius: $space-2;
+  margin: $space-4 auto;
+
+  &:global(.danger) {
+    background-color: $danger-50;
+    border-color: $danger-100;
+    color: $danger-700;
+  }
+}

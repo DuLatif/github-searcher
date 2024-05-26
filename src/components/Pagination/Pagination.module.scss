@@ -1,0 +1,42 @@
+.Pagination {
+  display: flex;
+  gap: $space-2;
+  margin: $space-4 auto;
+  align-items: center;
+  justify-content: center;
+
+  button {
+    border: none;
+    background-color: $neutral-100;
+    color: $neutral-700;
+    display: block;
+    cursor: pointer;
+    box-sizing: border-box;
+    height: 36px;
+    border-radius: $space-1;
+    transition: 0.2s;
+    &:hover {
+      background-color: $primary-100;
+    }
+    &:focus {
+      background-color: $primary-50;
+      box-shadow: 0px 0px 0px 4px $primary-100;
+    }
+
+    &.Page {
+      width: 36px;
+
+      &.CurrentPage {
+        background-color: $primary-100;
+        color: $primary-700;
+        cursor: auto;
+        font-weight: $font-bold;
+      }
+    }
+
+    &.Navigation {
+      display: block;
+      padding: $space-2 $space-6;
+    }
+  }
+}

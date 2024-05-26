@@ -17,4 +17,5 @@ export interface IPaginaionParams {
 export interface IPaginationResponse {
   total_count: number;
   incomplete_results: boolean;
+  total_page: number;
 }

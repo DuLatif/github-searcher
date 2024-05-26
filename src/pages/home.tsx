@@ -1,5 +1,8 @@
+import Alert from "@/components/Alert";
 import Header from "@/components/Header";
 import Input from "@/components/Input";
+import Pagination from "@/components/Pagination";
+import PaginationStats from "@/components/Pagination/PaginationStats";
 import Select from "@/components/Select";
 import { EOrder, ESearchCategory } from "@/interfaces/global.interface";
 import {
@@ -51,6 +54,24 @@ const HomePage: React.FC = () => {
   const repositoryListState = useSelector(
     (state: RootState) => state.repositoryList
   );
+  const userResponsePagination = useSelector((state: RootState) => {
+    const resultEntry = Object.entries(state.userList.results).find(
+      (item) => item[0] === state.userList.cacheKey
+    );
+    if (!!resultEntry) {
+      const result = resultEntry[1];
+      return {
+        start_item: (getUsersParams.page - 1) * getUsersParams.per_page + 1,
+        end_item: Math.min(
+          getUsersParams.page * getUsersParams.per_page,
+          result.total_page
+        ),
+        total_page: result.total_page,
+        total_data: result.total_count,
+      };
+    }
+    return { start_item: 0, end_item: 0, total_page: 0, total_data: 0 };
+  });
 
   useEffect(() => {
     const timeoutSearch = setTimeout(() => {
@@ -99,32 +120,50 @@ const HomePage: React.FC = () => {
           ))}
         </Select>
       </div>
+
       {searchKeyword.length <= 3 && <p>Search user or repository</p>}
 
       {searchCategory === ESearchCategory.USERS && searchKeyword.length > 3 && (
         <div>
           {userListState.loading && <p>Loading...</p>}
-          {userListState.error && <p>Error: {userListState.error}</p>}
-          <div className={styles.ListUser}>
-            {userListState.results &&
-              !userListState.loading &&
-              Object.entries(userListState.results).map(
-                ([cacheKey, resultSet]) => {
-                  if (cacheKey === userListState.cacheKey)
-                    return resultSet.items.map((result) => (
-                      <div key={result.id}>
-                        <img
-                          src={result.avatar_url}
-                          alt={result.login}
-                          width={50}
-                        />
-                        <p>{result.login}</p>
-                      </div>
-                    ));
-                  return null;
-                }
-              )}
-          </div>
+          {userListState.error && (
+            <Alert color="danger" message={userListState.error} />
+          )}
+          {userListState.results && (
+            <>
+              <PaginationStats
+                start={userResponsePagination.start_item}
+                end={userResponsePagination.end_item}
+                total={userResponsePagination.total_data}
+              />
+              <div className={styles.ListUser}>
+                {!userListState.loading &&
+                  Object.entries(userListState.results).map(
+                    ([cacheKey, resultSet]) => {
+                      if (cacheKey === userListState.cacheKey)
+                        return resultSet.items.map((result) => (
+                          <div key={result.id}>
+                            <img
+                              src={result.avatar_url}
+                              alt={result.login}
+                              width={50}
+                            />
+                            <p>{result.login}</p>
+                          </div>
+                        ));
+                      return null;
+                    }
+                  )}
+              </div>
+              <Pagination
+                currentPage={getUsersParams.page}
+                totalPages={userResponsePagination.total_page}
+                onPageChange={(page) => {
+                  setGetUsersParams((prev) => ({ ...prev, page }));
+                }}
+              />
+            </>
+          )}
         </div>
       )}
 

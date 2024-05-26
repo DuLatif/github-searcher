@@ -3,6 +3,7 @@ import {
   IGetUsersResponse,
 } from "@/interfaces/user.interface";
 import api from "./api";
+import { calculateTotalPages } from "@/utils/calculateTotalPages";
 
 export const getUsers = async (
   params: IGetUsersParams
@@ -11,5 +12,8 @@ export const getUsers = async (
     params: params,
   });
 
-  return response.data;
+  return {
+    ...response.data,
+    total_page: calculateTotalPages(response.data.total_count, params.per_page),
+  };
 };
