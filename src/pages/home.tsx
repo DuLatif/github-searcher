@@ -13,6 +13,7 @@ import {
 import { EUserSort, IGetUsersParams } from "@/interfaces/user.interface";
 import styles from "@/styles/Home.module.scss";
 import React, { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const searchOptions: { label: string; value: ESearchCategory }[] = [
   {
@@ -26,15 +27,23 @@ const searchOptions: { label: string; value: ESearchCategory }[] = [
 ];
 
 const HomePage: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState(
+    searchParams.get("q") || ""
+  );
   const [searchCategory, setSearchCategory] = useState<ESearchCategory>(
-    ESearchCategory.USERS
+    (searchParams.get("category") as ESearchCategory) || ESearchCategory.USERS
   );
   const [getUsersParams, setGetUsersParams] = useState<IGetUsersParams>({
     q: "",
     sort: EUserSort.FOLLOWERS,
-    page: 1,
+    page:
+      searchCategory === ESearchCategory.USERS
+        ? Number(searchParams.get("page")) || 1
+        : 1,
     per_page: 9,
     order: EOrder.DESC,
   });
@@ -42,7 +51,10 @@ const HomePage: React.FC = () => {
     useState<IGetRepositoriesParams>({
       q: "",
       sort: ERepositorySort.STARTS,
-      page: 1,
+      page:
+        searchCategory === ESearchCategory.REPOSITORIES
+          ? Number(searchParams.get("page")) || 1
+          : 1,
       per_page: 9,
       order: EOrder.DESC,
     });
@@ -51,6 +63,11 @@ const HomePage: React.FC = () => {
     setSearchKeyword("");
     if (inputRef.current) inputRef.current.focus();
   }, [searchCategory]);
+
+  useEffect(() => {
+    setGetUsersParams((prev) => ({ ...prev, page: 1 }));
+    setGetRepositoriesParams((prev) => ({ ...prev, page: 1 }));
+  }, [searchKeyword]);
 
   useEffect(() => {
     const timeoutSearch = setTimeout(() => {
@@ -63,6 +80,44 @@ const HomePage: React.FC = () => {
 
     return () => clearTimeout(timeoutSearch);
   }, [searchCategory, searchKeyword]);
+
+  useEffect(() => {
+    const category = searchParams.get("category") as ESearchCategory;
+    if (category === ESearchCategory.USERS) {
+      setGetUsersParams((prev) => ({
+        ...prev,
+        page: Number(searchParams.get("page")) || 1,
+      }));
+    } else {
+      setGetRepositoriesParams((prev) => ({
+        ...prev,
+        page: Number(searchParams.get("page")) || 1,
+      }));
+    }
+    setSearchKeyword(searchParams.get("q") || "");
+    setSearchCategory(category || ESearchCategory.USERS);
+  }, []);
+
+  useEffect(() => {
+    searchParams.set("category", searchCategory);
+    searchParams.set(
+      "page",
+      searchCategory === ESearchCategory.USERS
+        ? getUsersParams.page.toString()
+        : getRepositoriesParams.page.toString()
+    );
+    searchParams.set("q", encodeURIComponent(searchKeyword));
+
+    navigate({
+      pathname: location.pathname,
+      search: searchParams.toString(),
+    });
+  }, [
+    getUsersParams.page,
+    getRepositoriesParams.page,
+    searchCategory,
+    searchKeyword,
+  ]);
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
