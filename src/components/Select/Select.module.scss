@@ -5,6 +5,7 @@
   margin: $space-2 auto;
   transition: 0.25s box-shadow;
   box-sizing: border-box;
+  border-radius: $space-1;
 
   &:focus {
     border-color: $primary-400;
