@@ -1,8 +1,9 @@
-import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { fileURLToPath, URL } from "url";
+import { mergeConfig } from "vite";
+import { defineConfig } from "vitest/config";
 
-export default defineConfig({
+const viteConfig = {
   plugins: [react()],
   server: {
     port: 3000,
@@ -20,4 +21,19 @@ export default defineConfig({
       },
     },
   },
-});
+};
+
+export default mergeConfig(
+  viteConfig,
+  defineConfig({
+    test: {
+      globals: true,
+      environment: "jsdom",
+      // @ts-ignore
+      coverage: {
+        reporter: ["text", "html-spa"],
+        reportsDirectory: "./test/unit/coverage",
+      },
+    },
+  })
+);
