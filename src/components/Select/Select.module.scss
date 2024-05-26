@@ -6,6 +6,7 @@
   transition: 0.25s box-shadow;
   box-sizing: border-box;
   border-radius: $space-1;
+  background-color: #fff;
 
   &:focus {
     border-color: $primary-400;
