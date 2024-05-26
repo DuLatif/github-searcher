@@ -3,6 +3,7 @@ import {
   IGetRepositoriesResponse,
 } from "@/interfaces/repository.interface";
 import api from "./api";
+import { calculateTotalPages } from "@/utils/calculateTotalPages";
 
 export const getRepositories = async (
   params: IGetRepositoriesParams
@@ -14,5 +15,8 @@ export const getRepositories = async (
     }
   );
 
-  return response.data;
+  return {
+    ...response.data,
+    total_page: calculateTotalPages(response.data.total_count, params.per_page),
+  };
 };

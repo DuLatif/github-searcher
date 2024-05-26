@@ -54,6 +54,7 @@ const HomePage: React.FC = () => {
   const repositoryListState = useSelector(
     (state: RootState) => state.repositoryList
   );
+
   const userResponsePagination = useSelector((state: RootState) => {
     const resultEntry = Object.entries(state.userList.results).find(
       (item) => item[0] === state.userList.cacheKey
@@ -64,6 +65,25 @@ const HomePage: React.FC = () => {
         start_item: (getUsersParams.page - 1) * getUsersParams.per_page + 1,
         end_item: Math.min(
           getUsersParams.page * getUsersParams.per_page,
+          result.total_page
+        ),
+        total_page: result.total_page,
+        total_data: result.total_count,
+      };
+    }
+    return { start_item: 0, end_item: 0, total_page: 0, total_data: 0 };
+  });
+  const repositoryResponsePagination = useSelector((state: RootState) => {
+    const resultEntry = Object.entries(state.repositoryList.results).find(
+      (item) => item[0] === state.repositoryList.cacheKey
+    );
+    if (!!resultEntry) {
+      const result = resultEntry[1];
+      return {
+        start_item:
+          (getRepositoriesParams.page - 1) * getRepositoriesParams.per_page + 1,
+        end_item: Math.min(
+          getRepositoriesParams.page * getRepositoriesParams.per_page,
           result.total_page
         ),
         total_page: result.total_page,
@@ -121,8 +141,10 @@ const HomePage: React.FC = () => {
         </Select>
       </div>
 
+      {/* ------ If still not searching yet --------- */}
       {searchKeyword.length <= 3 && <p>Search user or repository</p>}
 
+      {/* ------ To display list users --------- */}
       {searchCategory === ESearchCategory.USERS && searchKeyword.length > 3 && (
         <div>
           {userListState.loading && <p>Loading...</p>}
@@ -167,35 +189,51 @@ const HomePage: React.FC = () => {
         </div>
       )}
 
+      {/* ------ To display list repository --------- */}
       {searchCategory === ESearchCategory.REPOSITORIES &&
         searchKeyword.length > 3 && (
           <div>
             {repositoryListState.loading && <p>Loading...</p>}
             {repositoryListState.error && (
-              <p>Error: {repositoryListState.error}</p>
+              <Alert color="danger" message={repositoryListState.error} />
             )}
-            <div className={styles.ListUser}>
-              {repositoryListState.results &&
-                !repositoryListState.loading &&
-                Object.entries(repositoryListState.results).map(
-                  ([cacheKey, resultSet]) => {
-                    if (cacheKey === repositoryListState.cacheKey)
-                      return resultSet.items.map((result) => (
-                        <div key={result.id}>
-                          <p>{result.name}</p>
-                          <div>
-                            <img
-                              src={result.owner.avatar_url}
-                              alt={result.owner.login}
-                              width={50}
-                            />
-                          </div>
-                        </div>
-                      ));
-                    return null;
-                  }
-                )}
-            </div>
+            {repositoryListState.results && (
+              <>
+                <PaginationStats
+                  start={repositoryResponsePagination.start_item}
+                  end={repositoryResponsePagination.end_item}
+                  total={repositoryResponsePagination.total_data}
+                />
+                <div className={styles.ListUser}>
+                  {!repositoryListState.loading &&
+                    Object.entries(repositoryListState.results).map(
+                      ([cacheKey, resultSet]) => {
+                        if (cacheKey === repositoryListState.cacheKey)
+                          return resultSet.items.map((result) => (
+                            <div key={result.id}>
+                              <p>{result.name}</p>
+                              <div>
+                                <img
+                                  src={result.owner.avatar_url}
+                                  alt={result.owner.login}
+                                  width={50}
+                                />
+                              </div>
+                            </div>
+                          ));
+                        return null;
+                      }
+                    )}
+                </div>
+                <Pagination
+                  currentPage={getRepositoriesParams.page}
+                  totalPages={userResponsePagination.total_page}
+                  onPageChange={(page) => {
+                    setGetRepositoriesParams((prev) => ({ ...prev, page }));
+                  }}
+                />
+              </>
+            )}
           </div>
         )}
     </main>
