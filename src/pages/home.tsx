@@ -32,7 +32,7 @@ const HomePage: React.FC = () => {
   const searchParams = new URLSearchParams(location.search);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [searchKeyword, setSearchKeyword] = useState(
-    searchParams.get("q") || ""
+    decodeURIComponent(searchParams.get("q") || "") || ""
   );
   const [searchCategory, setSearchCategory] = useState<ESearchCategory>(
     (searchParams.get("category") as ESearchCategory) || ESearchCategory.USERS
@@ -69,6 +69,7 @@ const HomePage: React.FC = () => {
     setGetRepositoriesParams((prev) => ({ ...prev, page: 1 }));
   }, [searchKeyword]);
 
+  // * Update the query parameter in state based on search keyword and category with debounce
   useEffect(() => {
     const timeoutSearch = setTimeout(() => {
       if (searchCategory === ESearchCategory.USERS) {
@@ -76,11 +77,12 @@ const HomePage: React.FC = () => {
       } else {
         setGetRepositoriesParams((prev) => ({ ...prev, q: searchKeyword }));
       }
-    }, 200);
+    }, 200); // Debounce to prevent too many API requests
 
-    return () => clearTimeout(timeoutSearch);
+    return () => clearTimeout(timeoutSearch); // Clear the timeout if the keyword or category changes
   }, [searchCategory, searchKeyword]);
 
+  // * Set initial state from URL parameters
   useEffect(() => {
     const category = searchParams.get("category") as ESearchCategory;
     if (category === ESearchCategory.USERS) {
@@ -94,10 +96,11 @@ const HomePage: React.FC = () => {
         page: Number(searchParams.get("page")) || 1,
       }));
     }
-    setSearchKeyword(searchParams.get("q") || "");
+    setSearchKeyword(decodeURIComponent(searchParams.get("q") || "") || "");
     setSearchCategory(category || ESearchCategory.USERS);
   }, []);
 
+  // * Update the URL when state changes
   useEffect(() => {
     searchParams.set("category", searchCategory);
     searchParams.set(
