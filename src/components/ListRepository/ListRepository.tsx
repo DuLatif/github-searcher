@@ -1,17 +1,14 @@
-import React, { useEffect } from "react";
-import Render from "../Render";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/redux/store";
-import { IGetUsersParams } from "@/interfaces/user.interface";
-import { fetchUserList } from "@/redux/usersReducer";
 import { ESearchCategory } from "@/interfaces/global.interface";
-import UserItem from "../UserItem";
-import Alert from "../Alert";
-import PaginationStats from "../Pagination/PaginationStats";
-import Pagination from "../Pagination";
-import styles from "@/styles/Home.module.scss";
 import { IGetRepositoriesParams } from "@/interfaces/repository.interface";
 import { fetchRepositoryList } from "@/redux/repositoriesReducer";
+import { AppDispatch, RootState } from "@/redux/store";
+import styles from "@/styles/Home.module.scss";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Alert from "../Alert";
+import Pagination from "../Pagination";
+import PaginationStats from "../Pagination/PaginationStats";
+import Render from "../Render";
 import RepositoryItem from "../RepositoryItem";
 
 export interface IListRepositoryProps {
@@ -72,9 +69,7 @@ const ListRepository: React.FC<IListRepositoryProps> = (props) => {
           in={repositoryListState.loading && !repositoryListState.results}
         >
           <div className={styles.ListUser}>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
-              <RepositoryItem.Skeleton key={item} />
-            ))}
+            <Render.Skeleton Component={RepositoryItem.Skeleton} items={9} />
           </div>
         </Render>
         <Render in={!!repositoryListState.error}>
@@ -99,9 +94,7 @@ const ListRepository: React.FC<IListRepositoryProps> = (props) => {
               )}
             </Render>
             <Render in={repositoryListState.loading}>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
-                <RepositoryItem.Skeleton key={item} />
-              ))}
+              <Render.Skeleton Component={RepositoryItem.Skeleton} items={9} />
             </Render>
           </div>
           <Pagination

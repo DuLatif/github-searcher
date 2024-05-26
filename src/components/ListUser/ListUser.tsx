@@ -58,9 +58,7 @@ const ListUser: React.FC<IListUserProps> = (props) => {
       <div>
         <Render in={userListState.loading && !userListState.results}>
           <div className={styles.ListUser}>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
-              <UserItem.Skeleton key={item} />
-            ))}
+            <Render.Skeleton Component={UserItem.Skeleton} items={9} />
           </div>
         </Render>
         <Render in={!!userListState.error}>
@@ -85,10 +83,7 @@ const ListUser: React.FC<IListUserProps> = (props) => {
               )}
             </Render>
             <Render in={userListState.loading}>
-              {userListState.loading &&
-                [1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
-                  <UserItem.Skeleton key={item} />
-                ))}
+              <Render.Skeleton Component={UserItem.Skeleton} items={9} />
             </Render>
           </div>
           <Pagination
