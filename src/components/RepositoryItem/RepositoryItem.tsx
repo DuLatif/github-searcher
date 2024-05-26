@@ -27,6 +27,7 @@ const RepositoryItem = ({ repository }: IRepositoryItemProps) => {
           <div
             className={styles.Avatar}
             style={{ backgroundImage: `url(${repository.owner.avatar_url})` }}
+            data-testid="repository avatar"
           ></div>
           <p>{repository.owner.login}</p>
         </div>
