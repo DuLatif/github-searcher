@@ -184,6 +184,7 @@ const HomePage: React.FC = () => {
                 currentPage={getUsersParams.page}
                 totalPages={userResponsePagination.total_page}
                 onPageChange={(page) => {
+                  window.scrollTo(0, 0);
                   setGetUsersParams((prev) => ({ ...prev, page }));
                 }}
               />
@@ -223,6 +224,7 @@ const HomePage: React.FC = () => {
                   currentPage={getRepositoriesParams.page}
                   totalPages={userResponsePagination.total_page}
                   onPageChange={(page) => {
+                    window.scrollTo(0, 0);
                     setGetRepositoriesParams((prev) => ({ ...prev, page }));
                   }}
                 />
